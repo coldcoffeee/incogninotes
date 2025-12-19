@@ -1,0 +1,393 @@
+/* Terminal aesthetic theme: black background, grey/white text, white fields, yellow accents */
+
+:root {
+    --bg: #000;
+    --text: #e6e6e6; /* light grey */
+    --muted: #9aa0a6; /* mid grey */
+    --accent: #ffd400; /* terminal yellow */
+    --border: #ffd400; /* same yellow for borders */
+    /* Retro-ish, less contrast fields: deep charcoal with soft inner glow */
+    --field-bg: #0b0b0b;
+    --field-text: #e6e6e6;
+    --field-shadow: rgba(255,212,0,0.12);
+    /* Hearts overlay variables */
+    --heart-size: 24px;
+    --heart-rot: 0deg;
+}
+
+/* Base layout */
+html, body {
+    height: 100%;
+}
+body.terminal {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "VT323", "Press Start 2P", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+    /* subtle CRT flicker */
+    animation: crt-flicker 8s infinite;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+/* Headings */
+.title {
+    font-family: "Press Start 2P", monospace;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    color: #fff;
+    text-shadow: 0 0 6px rgba(255, 212, 0, 0.25);
+    animation: title-shimmer 6s linear infinite;
+}
+.subtitle {
+    font-family: "Press Start 2P", monospace;
+    font-size: 1rem;
+    color: var(--muted);
+}
+
+/* Panels */
+.panel {
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    box-shadow: 0 0 0 2px rgba(255, 212, 0, 0.1), 0 0 12px rgba(255, 212, 0, 0.08);
+    background: linear-gradient(180deg, rgba(255, 212, 0, 0.06) 0%, rgba(0, 0, 0, 0.5) 12%), rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(1px);
+}
+
+/* Form fields */
+.field { display: block; margin-top: 1rem; }
+.label-text {
+    display: block;
+    font-family: "Press Start 2P", monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+}
+.input, .textarea {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    background: var(--field-bg);
+    color: var(--field-text);
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    padding: 0.6rem 0.7rem;
+    font-size: 1.05rem;
+    font-family: "VT323", monospace;
+    outline: none;
+    caret-color: var(--accent);
+    text-shadow: 0 1px 0 rgba(0,0,0,0.4);
+    /* softer retro glow inside */
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02), inset 0 0 14px rgba(255, 212, 0, 0.06);
+    transition: transform 120ms ease, box-shadow 160ms ease, filter 120ms ease;
+    background-clip: padding-box;
+}
+.input::placeholder, .textarea::placeholder { color: #bdbdbd; opacity: 0.7; }
+.input:focus, .textarea:focus {
+    box-shadow: 0 0 0 3px rgba(255,212,0,0.20), inset 0 0 16px var(--field-shadow);
+    transform: translateY(-1px);
+    filter: saturate(1.02) contrast(1.02);
+    background-color: var(--field-bg);
+}
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.textarea:-webkit-autofill,
+.textarea:-webkit-autofill:hover,
+.textarea:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--field-text) !important;
+    caret-color: var(--accent);
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: 0 0 0 1000px var(--field-bg) inset !important;
+    border: 2px solid var(--border);
+}
+.textarea {
+    min-height: 8rem;
+    resize: vertical;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+/* Button */
+.btn {
+    margin-top: 1rem;
+    display: inline-block;
+    font-family: "Press Start 2P", monospace;
+    font-size: 0.9rem;
+    background: var(--accent);
+    color: #111;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    padding: 0.7rem 1rem;
+    cursor: pointer;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+    box-shadow: 0 2px 0 #c7a600, 0 6px 16px rgba(255,212,0,0.25);
+    transition: transform 120ms ease, box-shadow 120ms ease, filter 200ms ease;
+}
+.btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+    animation: btn-pulse 900ms ease-in-out infinite;
+}
+.btn:active { transform: translateY(0); box-shadow: 0 1px 0 #c7a600, 0 3px 10px rgba(255,212,0,0.2); }
+
+/* Posts */
+.posts-list { margin-top: 0.5rem; }
+article {
+    border-bottom: 1px dashed var(--muted);
+    padding: 0.5rem 0;
+    opacity: 0;
+    transform: translateY(6px);
+    animation: post-in 240ms ease-out forwards;
+}
+article.glow-in {
+    animation: post-in 240ms ease-out forwards, glow 720ms ease-out;
+}
+article strong {
+    display: inline-block;
+    font-family: "Press Start 2P", monospace;
+    color: #fff;
+    letter-spacing: 1px;
+}
+article .timestamp {
+    display: inline-block;
+    margin-left: 0.5rem;
+    color: var(--muted);
+    font-family: "VT323", monospace;
+    font-size: 1rem;
+}
+article p { color: var(--text); }
+
+/* Decorative scanlines overlay for CRT effect */
+.scanlines {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.02),
+        rgba(255, 255, 255, 0.02) 2px,
+        rgba(0, 0, 0, 0) 2px,
+        rgba(0, 0, 0, 0) 4px
+    );
+    mix-blend-mode: overlay;
+    opacity: 0.45;
+}
+
+/* Animations */
+@keyframes post-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes crt-flicker {
+    0%, 100% { filter: none; }
+    50% { filter: saturate(1.05) contrast(1.02); }
+}
+@keyframes title-shimmer {
+    0% { text-shadow: 0 0 6px rgba(255, 212, 0, 0.22), 0 0 0 rgba(255,212,0,0); }
+    50% { text-shadow: 0 0 10px rgba(255, 212, 0, 0.32), 0 0 22px rgba(255,212,0,0.14); }
+    100% { text-shadow: 0 0 6px rgba(255, 212, 0, 0.22), 0 0 0 rgba(255,212,0,0); }
+}
+@keyframes focus-flicker {
+    0% { filter: contrast(1) brightness(1); }
+    25% { filter: contrast(1.05) brightness(1.08); }
+    50% { filter: contrast(0.95) brightness(0.96); }
+    75% { filter: contrast(1.06) brightness(1.1); }
+    100% { filter: contrast(1) brightness(1); }
+}
+@keyframes btn-pulse {
+    0%, 100% { box-shadow: 0 2px 0 #c7a600, 0 6px 16px rgba(255,212,0,0.25); }
+    50% { box-shadow: 0 2px 0 #c7a600, 0 10px 24px rgba(255,212,0,0.35); }
+}
+@keyframes glow {
+    0% { box-shadow: 0 0 0 rgba(255,212,0,0); }
+    50% { box-shadow: 0 0 14px rgba(255,212,0,0.25); }
+    100% { box-shadow: 0 0 0 rgba(255,212,0,0); }
+}
+
+/* Accessibility: focus ring visible on dark bg */
+:focus-visible { outline: 3px solid rgba(255,212,0,0.55); outline-offset: 2px; }
+
+/* Accessibility: keep sufficient contrast on focused text */
+.input:focus, .textarea:focus { color: var(--field-text); }
+
+/* Prevent white autofill/focus background in Safari/Chrome */
+.input, .textarea {
+    /* ...existing code... */
+    background-clip: padding-box;
+}
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.textarea:-webkit-autofill,
+.textarea:-webkit-autofill:hover,
+.textarea:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--field-text) !important;
+    caret-color: var(--accent);
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: 0 0 0 1000px var(--field-bg) inset !important;
+    border: 2px solid var(--border);
+}
+
+/* Explicit focus background to avoid white flash */
+.input:focus, .textarea:focus {
+    background-color: var(--field-bg);
+}
+
+/* Spacing for counters under fields */
+.counter {
+    display: block;
+    margin-top: 0.35rem;
+}
+
+/* Stronger CRT vibe: subtle vignette and scanline glow */
+body.terminal::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, rgba(255,212,0,0.05) 0%, rgba(0,0,0,0.5) 55%, rgba(0,0,0,0.85) 100%);
+    mix-blend-mode: soft-light;
+}
+.scanlines { opacity: 0.45; }
+
+/* Extra flair: title shimmer */
+.title {
+    /* ...existing code... */
+    animation: title-shimmer 6s linear infinite;
+}
+@keyframes title-shimmer {
+    0% { text-shadow: 0 0 6px rgba(255, 212, 0, 0.22), 0 0 0 rgba(255,212,0,0); }
+    50% { text-shadow: 0 0 10px rgba(255, 212, 0, 0.32), 0 0 22px rgba(255,212,0,0.14); }
+    100% { text-shadow: 0 0 6px rgba(255, 212, 0, 0.22), 0 0 0 rgba(255,212,0,0); }
+}
+
+/* Input flicker and glow on focus (trigger via JS class) */
+.input.focus-fx, .textarea.focus-fx {
+    animation: focus-flicker 260ms linear 2;
+    box-shadow: 0 0 0 3px rgba(255,212,0,0.25), inset 0 0 18px var(--field-shadow), 0 0 16px rgba(255,212,0,0.18);
+}
+@keyframes focus-flicker {
+    0% { filter: contrast(1) brightness(1); }
+    25% { filter: contrast(1.05) brightness(1.08); }
+    50% { filter: contrast(0.95) brightness(0.96); }
+    75% { filter: contrast(1.06) brightness(1.1); }
+    100% { filter: contrast(1) brightness(1); }
+}
+
+/* Button pulse on hover */
+.btn:hover { /* ...existing code... */ animation: btn-pulse 900ms ease-in-out infinite; }
+@keyframes btn-pulse {
+    0%, 100% { box-shadow: 0 2px 0 #c7a600, 0 6px 16px rgba(255,212,0,0.25); }
+    50% { box-shadow: 0 2px 0 #c7a600, 0 10px 24px rgba(255,212,0,0.35); }
+}
+
+/* Post arrival glow (triggered via JS) */
+article.glow-in {
+    animation: post-in 240ms ease-out forwards, glow 720ms ease-out;
+}
+@keyframes glow {
+    0% { box-shadow: 0 0 0 rgba(255,212,0,0); }
+    50% { box-shadow: 0 0 14px rgba(255,212,0,0.25); }
+    100% { box-shadow: 0 0 0 rgba(255,212,0,0); }
+}
+
+/* Minor noise overlay to add texture */
+body.terminal::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0 0 0 .03 .06 .03 0 0 0'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.05;
+    mix-blend-mode: soft-light;
+}
+
+/* Accessibility: keep sufficient contrast on focused text */
+.input:focus, .textarea:focus { color: var(--field-text); }
+
+/* Snoopy theme: white + pink (lighter background, bright pink names, pink glow) */
+body.snoopy-theme {
+    background: #ffe3f3; /* very light pink-tinted white */
+    color: #d81b60; /* base pink text */
+}
+body.snoopy-theme .title {
+    color: #ff2e8b; /* bright pink */
+    text-shadow: 0 0 8px rgba(255, 46, 139, 0.35), 0 0 16px rgba(255, 128, 171, 0.25);
+}
+body.snoopy-theme .subtitle { color: #ff80ab; }
+body.snoopy-theme .panel {
+    border-color: #ff80ab;
+    background: linear-gradient(180deg, rgba(255,128,171,0.09) 0%, rgba(255,255,255,0.85) 12%), rgba(255,255,255,0.92);
+    box-shadow: 0 0 0 2px rgba(255, 128, 171, 0.12), 0 0 16px rgba(255, 128, 171, 0.10);
+}
+body.snoopy-theme .btn {
+    background: #ff80ab;
+    border-color: #ff80ab;
+    color: #5d0031;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+    box-shadow: 0 2px 0 #d6688d, 0 6px 16px rgba(255,128,171,0.28);
+}
+body.snoopy-theme .input,
+body.snoopy-theme .textarea {
+    background: #fff;
+    color: #5d0031;
+    border-color: #ff80ab;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4), inset 0 0 14px rgba(255,128,171,0.10);
+}
+body.snoopy-theme .input:focus,
+body.snoopy-theme .textarea:focus {
+    box-shadow: 0 0 0 3px rgba(255,128,171,0.30), inset 0 0 16px rgba(255,128,171,0.15);
+}
+body.snoopy-theme article strong {
+    color: #ff2e8b; /* bright pink name */
+    text-shadow: 0 0 6px rgba(255, 46, 139, 0.28);
+}
+body.snoopy-theme article p { color: #7a2551; }
+body.snoopy-theme article .timestamp { color: #d6688d; }
+
+/* Pink glow on post arrival when in Snoopy theme */
+body.snoopy-theme article.glow-in {
+    animation: post-in 240ms ease-out forwards, snoopy-glow 720ms ease-out;
+}
+@keyframes snoopy-glow {
+    0% { box-shadow: 0 0 0 rgba(255,128,171,0); }
+    50% { box-shadow: 0 0 14px rgba(255,128,171,0.30); }
+    100% { box-shadow: 0 0 0 rgba(255,128,171,0); }
+}
+
+/* Accessibility: pink focus ring in Snoopy theme */
+body.snoopy-theme :focus-visible { outline: 3px solid rgba(255,128,171,0.55); }
+
+/* Hearts overlay layer (full viewport, above content) */
+.hearts-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999; /* ensure above all UI */
+}
+.heart-sprite {
+    position: absolute;
+    width: var(--heart-size, 24px);
+    height: var(--heart-size, 24px);
+    opacity: 0;
+    transform: rotate(var(--heart-rot, 0deg)) scale(0.8);
+    animation: heart-pop 1200ms ease forwards;
+    will-change: transform, opacity;
+}
+.heart-sprite img { width: 100%; height: 100%; display: block; }
+
+@keyframes heart-pop {
+    0% { opacity: 0; transform: translateY(6px) rotate(var(--heart-rot, 0deg)) scale(0.8); }
+    15% { opacity: 1; transform: translateY(0) rotate(var(--heart-rot, 0deg)) scale(1); }
+    70% { opacity: 1; transform: translateY(-6px) rotate(var(--heart-rot, 0deg)) scale(1.05); }
+    100% { opacity: 0; transform: translateY(-10px) rotate(var(--heart-rot, 0deg)) scale(0.9); }
+}

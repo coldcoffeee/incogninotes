@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>IncogniNotes</title>
+    <!-- Retro Game Over style font -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
+<body class="terminal">
+<main class="container">
+    <h1 class="title">IncogniNotes
+        <button id="soundToggle" class="btn" style="margin-left:0.5rem; font-size:0.75rem;">🔊 Sound: On</button>
+    </h1>
+
+    <form id="postForm" class="panel">
+        <label class="field">
+            <span class="label-text">Name</span>
+            <input type="text" id="name" maxlength="30" class="input" />
+            <small id="nameCounter" class="label-text counter" aria-live="polite">0 / 30</small>
+        </label>
+
+        <label class="field">
+            <span class="label-text">Message</span>
+            <textarea id="content" required class="textarea" maxlength="1000"></textarea>
+            <small id="charCounter" class="label-text counter" aria-live="polite">0 / 1000</small>
+        </label>
+
+        <button type="submit" class="btn">Post</button>
+    </form>
+
+    <section aria-live="polite" class="panel posts">
+        <h2 class="subtitle">Latest Messages</h2>
+        <div id="posts" class="posts-list"></div>
+    </section>
+
+    <!-- Preload pop sound -->
+    <audio id="popSound" src="/pop.mp3" preload="auto"></audio>
+
+    <!-- Decorative scanlines overlay for terminal vibe -->
+    <div class="scanlines" aria-hidden="true"></div>
+</main>
+
+<!-- Hearts overlay for Snoopy theme (outside main to cover full viewport) -->
+<div id="heartsLayer" class="hearts-layer" aria-hidden="true"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
